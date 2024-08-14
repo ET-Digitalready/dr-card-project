@@ -1,19 +1,3 @@
-
-    # ACE = 1
-    # TWO = 2
-    # THREE = 3
-    # FOUR = 4
-    # FIVE = 5
-    # SIX = 6
-    # SEVEN = 7
-    # EIGHT = 8
-    # NINE = 9
-    # TEN = 10
-    # JACK = 10
-    # QUEEN = 10
-    # KING = 10
-    # ACE = 11
-
 import random
 from enum import Enum, auto
 # Define card ranks using Enum
@@ -35,10 +19,10 @@ class Rank(Enum):
         return self.name.capitalize()
 # Define suits using Enum
 class Suit(Enum):
-    HEARTS = auto()
-    DIAMONDS = auto()
-    CLUBS = auto()
-    SPADES = auto()
+    Hearts = auto()
+    Diamonds = auto()
+    Clubs = auto()
+    Spades = auto()
 # Define card class
 class Card:
     def __init__(self, rank, suit):
@@ -79,7 +63,7 @@ class BlackjackGame:
             self.player_hand.add_card(self.deck.draw())
             self.dealer_hand.add_card(self.deck.draw())
     def display_hands(self, reveal_dealer=False):
-        print(f"Player's hand: {self.player_hand} - Value: {self.player_hand.calculate_value()}")
+        print(f"your hand: {self.player_hand} - Value: {self.player_hand.calculate_value()}")
         if reveal_dealer:
             print(f"Dealer's hand: {self.dealer_hand} - Value: {self.dealer_hand.calculate_value()}")
         else:
@@ -96,25 +80,34 @@ class BlackjackGame:
             elif action == 'stand':
                 return True
             else:
-                print("Invalid action. Please enter 'hit' or 'stand'.")
+                print("Please enter 'hit' or 'stand'.")
+            if self.player_hand.calculate_value() == 21:
+                return "player wins"
+            elif self.dealer_hand.calculate_value() == 21:
+                    pass
     def dealer_turn(self):
         while self.dealer_hand.calculate_value() < 17:
             self.dealer_hand.add_card(self.deck.draw())
         if self.dealer_hand.calculate_value() > 21:
             print("Dealer busts!")
+        if self.dealer_hand.calculate_value() == 21:
+            print("Dealer wins!")
+        elif self.player_hand.calculate_value() == 21:
+            pass       
+# defines how the player or cpu wins
     def determine_winner(self):
         player_value = self.player_hand.calculate_value()
         dealer_value = self.dealer_hand.calculate_value()
         if player_value > 21:
-            return "Player busts. Dealer wins!"
+            return "you busts. Dealer wins!"
         elif dealer_value > 21:
-            return "Dealer busts. Player wins!"
+            return "you won! Dealer busts."
         elif player_value > dealer_value:
-            return "Player wins!"
+            return "you won"
         elif player_value < dealer_value:
             return "Dealer wins!"
         else:
-            return "It's a tie!"
+            return "Its a tie!"
     def play(self):
         self.initial_deal()
         self.display_hands()
@@ -127,6 +120,11 @@ if __name__ == "__main__":
     while True:
         print("\nWelcome to Blackjack!")
         game = BlackjackGame()
+        game.play()
+        again = input("Do you want to play again? (yes/no) ").lower()
+        if again != 'yes':
+            print("Thanks for playing!")
+            break
         game.play()
         again = input("Do you want to play again? (yes/no) ").lower()
         if again != 'yes':
